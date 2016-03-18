@@ -12,30 +12,29 @@ import com.vstechlab.easyfonts.EasyFonts;
 
 public class DetailActivity extends AppCompatActivity {
 
+    ImageView dImageView;
+    LinearLayout placeHolder;
+    LinearLayout placeNameHolder;
+    TextView dTextView, dPriceView, dDescView, addressView;
+    Bitmap loadedBitmap;
     private ImageView mImageView;
     private TextView mTitle;
     private LinearLayout mTitleHolder;
 
-
-    ImageView dImageView;
-    LinearLayout placeHolder;
-    LinearLayout placeNameHolder;
-    TextView dTextView,dPriceView, dDescView, addressView;
-    Bitmap loadedBitmap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
 
-         placeHolder = (LinearLayout) findViewById(R.id.mainHolder);
-         placeNameHolder = (LinearLayout) findViewById(R.id.placeNameHolder);
+        placeHolder = (LinearLayout) findViewById(R.id.mainHolder);
+        placeNameHolder = (LinearLayout) findViewById(R.id.placeNameHolder);
 
-         dTextView = (TextView) findViewById(R.id.detailTextView);
+        dTextView = (TextView) findViewById(R.id.detailTextView);
         addressView = (TextView) findViewById(R.id.addressTextView);
         dDescView = (TextView) findViewById(R.id.descTextview);
-         dPriceView = (TextView) findViewById(R.id.priceView);
-         dImageView = (ImageView) findViewById(R.id.placeImage2);
+        dPriceView = (TextView) findViewById(R.id.priceView);
+        dImageView = (ImageView) findViewById(R.id.placeImage2);
 
         Picasso.with(this).load(getIntent().getStringExtra("url")).into(dImageView);
 

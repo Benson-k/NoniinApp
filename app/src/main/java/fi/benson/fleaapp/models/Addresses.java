@@ -6,11 +6,14 @@ package fi.benson.fleaapp.models;
 public class Addresses {
 
     private String address;
-    private String city ;
-    private String state ;
-    private  String country;
-    private  String postalCode ;
-    private  String knownName ;
+    private String city;
+    private String state;
+    private String country;
+    private String postalCode;
+    private String knownName;
+
+    public Addresses() {
+    }
 
     public String getAddress() {
         return address;
@@ -58,8 +61,5 @@ public class Addresses {
 
     public void setKnownName(String knownName) {
         this.knownName = knownName;
-    }
-
-    public Addresses() {
     }
 }

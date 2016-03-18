@@ -5,149 +5,118 @@ import com.backendless.BackendlessCollection;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.persistence.BackendlessDataQuery;
 
-public class Post
-{
-  private java.util.Date created;
-  private String description;
-  private String title;
-  private String url;
-  private String address;
-  private String ownerId;
-  private java.util.Date updated;
-  private int price;
-  private String objectId;
-  public java.util.Date getCreated()
-  {
-    return created;
-  }
+public class Post {
+    private java.util.Date created;
+    private String description;
+    private String title;
+    private String url;
+    private String address;
+    private String ownerId;
+    private java.util.Date updated;
+    private int price;
+    private String objectId;
 
-  public String getDescription()
-  {
-    return description;
-  }
+    public static Post findById(String id) {
+        return Backendless.Data.of(Post.class).findById(id);
+    }
 
-  public void setDescription( String description )
-  {
-    this.description = description;
-  }
+    public static void findByIdAsync(String id, AsyncCallback<Post> callback) {
+        Backendless.Data.of(Post.class).findById(id, callback);
+    }
 
-  public String getTitle()
-  {
-    return title;
-  }
+    public static Post findFirst() {
+        return Backendless.Data.of(Post.class).findFirst();
+    }
 
-  public void setTitle( String title )
-  {
-    this.title = title;
-  }
+    public static void findFirstAsync(AsyncCallback<Post> callback) {
+        Backendless.Data.of(Post.class).findFirst(callback);
+    }
 
-  public String getAddress(){return  address;}
+    public static Post findLast() {
+        return Backendless.Data.of(Post.class).findLast();
+    }
 
-  public void setAddress(String address){ this.address = address;}
+    public static void findLastAsync(AsyncCallback<Post> callback) {
+        Backendless.Data.of(Post.class).findLast(callback);
+    }
 
-  public String getUrl()
-  {
-    return url;
-  }
+    public static BackendlessCollection<Post> find(BackendlessDataQuery query) {
+        return Backendless.Data.of(Post.class).find(query);
+    }
 
-  public void setUrl( String url )
-  {
-    this.url = url;
-  }
+    public static void findAsync(BackendlessDataQuery query, AsyncCallback<BackendlessCollection<Post>> callback) {
+        Backendless.Data.of(Post.class).find(query, callback);
+    }
 
-  public String getOwnerId()
-  {
-    return ownerId;
-  }
+    public java.util.Date getCreated() {
+        return created;
+    }
 
-  public java.util.Date getUpdated()
-  {
-    return updated;
-  }
+    public String getDescription() {
+        return description;
+    }
 
-  public int getPrice()
-  {
-    return price;
-  }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-  public void setPrice( int price )
-  {
-    this.price = price;
-  }
+    public String getTitle() {
+        return title;
+    }
 
-  public String getObjectId()
-  {
-    return objectId;
-  }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-                                                    
-  public Post save()
-  {
-    return Backendless.Data.of( Post.class ).save( this );
-  }
+    public String getAddress() {
+        return address;
+    }
 
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
+    public String getUrl() {
+        return url;
+    }
 
-  public void saveAsync( AsyncCallback<Post> callback ) {
-    Backendless.Data.of( Post.class ).save( this, callback );
-  }
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-  public Long remove()
-  {
-    return Backendless.Data.of( Post.class ).remove( this );
-  }
+    public String getOwnerId() {
+        return ownerId;
+    }
 
+    public java.util.Date getUpdated() {
+        return updated;
+    }
 
+    public int getPrice() {
+        return price;
+    }
 
-  public void removeAsync( AsyncCallback<Long> callback )
-  {
-    Backendless.Data.of( Post.class ).remove( this, callback );
-  }
+    public void setPrice(int price) {
+        this.price = price;
+    }
 
-  public static Post findById( String id )
-  {
-    return Backendless.Data.of( Post.class ).findById( id );
-  }
+    public String getObjectId() {
+        return objectId;
+    }
 
+    public Post save() {
+        return Backendless.Data.of(Post.class).save(this);
+    }
 
+    public void saveAsync(AsyncCallback<Post> callback) {
+        Backendless.Data.of(Post.class).save(this, callback);
+    }
 
-  public static void findByIdAsync( String id, AsyncCallback<Post> callback )
-  {
-    Backendless.Data.of( Post.class ).findById( id, callback );
-  }
+    public Long remove() {
+        return Backendless.Data.of(Post.class).remove(this);
+    }
 
-  public static Post findFirst()
-  {
-    return Backendless.Data.of( Post.class ).findFirst();
-  }
-
-
-
-  public static void findFirstAsync( AsyncCallback<Post> callback )
-  {
-    Backendless.Data.of( Post.class ).findFirst( callback );
-  }
-
-  public static Post findLast()
-  {
-    return Backendless.Data.of( Post.class ).findLast();
-  }
-
-
-
-  public static void findLastAsync( AsyncCallback<Post> callback )
-  {
-    Backendless.Data.of( Post.class ).findLast( callback );
-  }
-
-  public static BackendlessCollection<Post> find( BackendlessDataQuery query )
-  {
-    return Backendless.Data.of( Post.class ).find( query );
-  }
-
-
-  public static void findAsync( BackendlessDataQuery query, AsyncCallback<BackendlessCollection<Post>> callback )
-  {
-    Backendless.Data.of( Post.class ).find( query, callback );
-  }
+    public void removeAsync(AsyncCallback<Long> callback) {
+        Backendless.Data.of(Post.class).remove(this, callback);
+    }
 }

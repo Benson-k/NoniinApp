@@ -28,15 +28,12 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.C
     private static final String APP_ID = "AIzaSyCtVdHPf7j1OmH_BUhEp1tlqRNS_F6BPpQ";
 
     private static final int PERMISSION_ACCESS_COARSE_LOCATION = 1;
-    private GoogleApiClient googleApiClient;
-
     Geocoder geocoder;
     List<Address> addresses;
-
     Addresses savedAddresses;
     String nchi;
-
     TextView ccity;
+    private GoogleApiClient googleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +44,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.C
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.ACCESS_COARSE_LOCATION },
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                     PERMISSION_ACCESS_COARSE_LOCATION);
         }
 
@@ -95,17 +92,16 @@ public class MapsActivity extends AppCompatActivity implements GoogleApiClient.C
             geocoder = new Geocoder(this, Locale.ENGLISH);
 
             try {
-               addresses = geocoder.getFromLocation(lat, lon, 1);
+                addresses = geocoder.getFromLocation(lat, lon, 1);
 
-                if(addresses != null) {
+                if (addresses != null) {
                     Address returnedAddress = addresses.get(0);
                     StringBuilder strReturnedAddress = new StringBuilder("Address:\n");
-                    for(int i=0; i<returnedAddress.getMaxAddressLineIndex(); i++) {
+                    for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
                         strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
                     }
                     ccity.setText(strReturnedAddress.toString());
-                }
-                else{
+                } else {
                     ccity.setText("No Address returned!");
                 }
             } catch (IOException e) {

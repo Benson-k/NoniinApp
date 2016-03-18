@@ -13,8 +13,8 @@ import fi.benson.fleaapp.R;
 @SuppressWarnings("unused")
 public class AvatarImageBehavior extends CoordinatorLayout.Behavior<CircleImageView> {
 
-    private final static float MIN_AVATAR_PERCENTAGE_SIZE   = 0.3f;
-    private final static int EXTRA_FINAL_AVATAR_PADDING     = 80;
+    private final static float MIN_AVATAR_PERCENTAGE_SIZE = 0.3f;
+    private final static int EXTRA_FINAL_AVATAR_PADDING = 80;
 
     private final static String TAG = "behavior";
     private Context mContext;
@@ -76,10 +76,10 @@ public class AvatarImageBehavior extends CoordinatorLayout.Behavior<CircleImageV
         float expandedPercentageFactor = dependency.getY() / maxScrollDistance;
 
         float distanceYToSubtract = ((mStartYPosition - mFinalYPosition)
-                * (1f - expandedPercentageFactor)) + (child.getHeight()/2);
+                * (1f - expandedPercentageFactor)) + (child.getHeight() / 2);
 
         float distanceXToSubtract = ((mStartXPosition - mFinalXPosition)
-                * (1f - expandedPercentageFactor)) + (child.getWidth()/2);
+                * (1f - expandedPercentageFactor)) + (child.getWidth() / 2);
 
         float heightToSubtract = ((mStartHeight - mCustomFinalHeight) * (1f - expandedPercentageFactor));
 
@@ -100,7 +100,7 @@ public class AvatarImageBehavior extends CoordinatorLayout.Behavior<CircleImageV
             mStartYPosition = (int) (dependency.getY());
 
         if (mFinalYPosition == 0)
-            mFinalYPosition = (dependency.getHeight() /2);
+            mFinalYPosition = (dependency.getHeight() / 2);
 
         if (mStartHeight == 0)
             mStartHeight = child.getHeight();
@@ -112,7 +112,7 @@ public class AvatarImageBehavior extends CoordinatorLayout.Behavior<CircleImageV
             mFinalXPosition = mContext.getResources().getDimensionPixelOffset(R.dimen.abc_action_bar_content_inset_material) + ((int) mCustomFinalHeight / 2);
 
         if (mStartToolbarPosition == 0)
-            mStartToolbarPosition = dependency.getY() + (dependency.getHeight()/2);
+            mStartToolbarPosition = dependency.getY() + (dependency.getHeight() / 2);
     }
 
     public int getStatusBarHeight() {

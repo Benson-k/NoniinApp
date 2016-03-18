@@ -5,7 +5,7 @@ package fi.benson.fleaapp.defaults;
  */
 public class Parcelablezz {
 
-    String address ;
+    String address;
 
     public Parcelablezz() {
 

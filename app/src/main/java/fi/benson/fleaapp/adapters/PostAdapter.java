@@ -29,9 +29,9 @@ import fi.benson.fleaapp.models.Post;
  */
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
+    Bitmap myBitmap;
     private List<Post> list;
     private Context context;
-    Bitmap myBitmap;
 
     public PostAdapter(Context context, List<Post> list) {
         this.context = context;
@@ -41,7 +41,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     @Override
     public PostAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_places, parent, false);
-        return new ViewHolder(view,context,list);
+        return new ViewHolder(view, context, list);
     }
 
     @Override
@@ -49,7 +49,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         final Post post = list.get(position);
 
-       // Picasso.with(context).load(post.getUrl()).into(holder.placeImage);
+        // Picasso.with(context).load(post.getUrl()).into(holder.placeImage);
 
         holder.placeName.setText(post.getTitle());
         holder.placeName.setTypeface(EasyFonts.walkwayBlack(context));
@@ -76,15 +76,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
 
-
-
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         //Setup Views
         public LinearLayout placeHolder;
         public LinearLayout placeNameHolder;
         public TextView placeName;
         public ImageView placeImage;
-
 
 
         List<Post> itemPosts = new ArrayList<Post>();
@@ -114,10 +111,10 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             Post itemPost = this.itemPosts.get(position);
 
             Intent intent = new Intent(this.ctx, DetailActivity.class);
-            intent.putExtra("url",itemPost.getUrl());
-            intent.putExtra("title",itemPost.getTitle());
+            intent.putExtra("url", itemPost.getUrl());
+            intent.putExtra("title", itemPost.getTitle());
             intent.putExtra("price", itemPost.getPrice());
-            intent.putExtra("desc",itemPost.getDescription());
+            intent.putExtra("desc", itemPost.getDescription());
             intent.putExtra("address", itemPost.getAddress());
 
 

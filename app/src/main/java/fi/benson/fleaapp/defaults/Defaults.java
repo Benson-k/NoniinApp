@@ -10,7 +10,7 @@ public class Defaults {
     public static final String DATA_TAG = "data";
     public static final String DEFAULT_PATH_ROOT = "fileservice_sample";
     public static final int REQUEST_IMAGE_CAPTURE = 1;
-    public static final  int PICK_IMAGE = 50;
+    public static final int PICK_IMAGE = 50;
     public static final int CAPTURE_IMAGE = 51;
     public static final String IMAGE_DIRECTORY_NAME = "My Camera";
 

@@ -11,7 +11,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.internal.NavigationMenu;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -31,9 +33,11 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.BackendlessDataQuery;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,34 +59,32 @@ public class MainActivity extends AppCompatActivity
 
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
-
-
-    private PostAdapter adapter;
-    private List<Post> posts = new ArrayList<>();
-    private BackendlessCollection<Post> post;
-    private RecyclerView recycler;
-
-    private Uri fileUri;
-
-
     private static final String APP_ID = "AIzaSyCtVdHPf7j1OmH_BUhEp1tlqRNS_F6BPpQ";
-
     private static final int PERMISSION_ACCESS_COARSE_LOCATION = 201;
     private static final int PERMISSION_ACCESS_CAMERA = 202;
     private static final int PERMISSION_ACCESS_STORAGE = 203;
-    private GoogleApiClient googleApiClient;
-
+    public String myReturnedAddress;
     Geocoder geocoder;
     List<Address> addresses;
+    private PostAdapter adapter;
+    private List<Post> posts = new ArrayList<>();
+    private  BackendlessCollection<Post> post;
+    private RecyclerView recycler;
+    private Uri fileUri;
+    private GoogleApiClient googleApiClient;
+    MaterialSearchView searchView;
+    CoordinatorLayout coordinatorLayout;
 
-    public String myReturnedAddress;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorlayout);
 
         pullDataFromServer();
+        materialSearch();
 
         recycler = (RecyclerView) findViewById(R.id.listTwo);
         recycler.setItemAnimator(new DefaultItemAnimator());
@@ -99,6 +101,7 @@ public class MainActivity extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
+
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -119,7 +122,7 @@ public class MainActivity extends AppCompatActivity
 
 
                 if (id == R.id.action_manage) {
-                   Intent lintent = new Intent(MainActivity.this, MapsActivity.class);
+                    Intent lintent = new Intent(MainActivity.this, MapsActivity.class);
                     startActivity(lintent);
                 } else if (id == R.id.action_gallery) {
                     Intent intent = new Intent();
@@ -133,7 +136,6 @@ public class MainActivity extends AppCompatActivity
                 return false;
             }
         });
-
 
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -156,8 +158,12 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    private void addMoreItems( BackendlessCollection<Post> nextPage ) {
+    private void addMoreItems(BackendlessCollection<Post> nextPage) {
         posts.addAll(nextPage.getCurrentPage());
+        adapter.notifyDataSetChanged();
+    }
+    private void clearItems() {
+        posts.clear();
         adapter.notifyDataSetChanged();
     }
 
@@ -169,10 +175,10 @@ public class MainActivity extends AppCompatActivity
             int type;
             if (requestCode == Defaults.PICK_IMAGE) {
                 path = data.getData();
-                type=50;
+                type = 50;
             } else {
                 path = fileUri;
-                type=51;
+                type = 51;
             }
             Intent i = new Intent(MainActivity.this, UploadActivity.class);
             i.putExtra("extras", path);
@@ -183,7 +189,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void pullDataFromServer(){
+    public void pullDataFromServer() {
         Backendless.Persistence.of(Post.class).find(new AsyncCallback<BackendlessCollection<Post>>() {
             @Override
             public void handleResponse(BackendlessCollection<Post> foundPosts) {
@@ -210,17 +216,83 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (searchView.isSearchOpen()) {
+            searchView.closeSearch();
         } else {
             super.onBackPressed();
         }
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.button_menu, menu);
+
+        MenuItem item = menu.findItem(R.id.action_search);
+        searchView.setMenuItem(item);
+
         return true;
     }
+
+
+    public void materialSearch(){
+
+        searchView = (MaterialSearchView) findViewById(R.id.search_view);
+        assert searchView != null;
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                //Do some magic
+
+                return false;
+            }
+
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //Do some magic
+                BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+
+                StringBuilder str = new StringBuilder(" title LIKE ");
+                str.append("'").append(newText).append("%'");
+
+                dataQuery.setWhereClause("" + str);
+
+                Backendless.Data.of(Post.class).find(dataQuery, new AsyncCallback<BackendlessCollection<Post>>() {
+                    @Override
+                    public void handleResponse(BackendlessCollection<Post> result) {
+
+                        clearItems();
+                        post = result;
+                        addMoreItems(result);
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault backendlessFault) {
+                        Snackbar.make(coordinatorLayout, backendlessFault.toString(), Snackbar.LENGTH_LONG).show();
+                    }
+                });
+                return false;
+            }
+        });
+
+        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+            @Override
+            public void onSearchViewShown() {
+                //Do some magic
+            }
+
+            @Override
+            public void onSearchViewClosed() {
+                //Do some magic
+                pullDataFromServer();
+            }
+        });
+    }
+
+
 
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -228,19 +300,23 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        Intent intent;
 
         if (id == R.id.nav_camera) {
-            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+            intent = new Intent(MainActivity.this, MapsActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
+            //intent = new Intent(MainActivity.this, SettingsActivity.class);
+            //startActivity(intent);
 
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
+
 
 
         }
@@ -255,7 +331,7 @@ public class MainActivity extends AppCompatActivity
      */
 
     private void captureImage() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
 
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             fileUri = getOutputMediaFileUri(1);
@@ -266,18 +342,22 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    /** Create a file Uri for saving an image or video */
-    private  Uri getOutputMediaFileUri(int type){
+    /**
+     * Create a file Uri for saving an image or video
+     */
+    private Uri getOutputMediaFileUri(int type) {
 
 
         return Uri.fromFile(getOutputMediaFile(type));
     }
 
-    /** Create a File for saving an image or video */
-    private File getOutputMediaFile(int type){
+    /**
+     * Create a File for saving an image or video
+     */
+    private File getOutputMediaFile(int type) {
         File mediaFile = null;
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             // To be safe, you should check that the SDCard is mounted
             // using Environment.getExternalStorageState() before doing this.
 
@@ -287,8 +367,8 @@ public class MainActivity extends AppCompatActivity
             // between applications and persist after your app has been uninstalled.
 
             // Create the storage directory if it does not exist
-            if (! mediaStorageDir.exists()){
-                if (! mediaStorageDir.mkdirs()){
+            if (!mediaStorageDir.exists()) {
+                if (!mediaStorageDir.mkdirs()) {
                     Log.d("MyCameraApp", "failed to create directory");
                     return null;
                 }
@@ -297,12 +377,12 @@ public class MainActivity extends AppCompatActivity
             // Create a media file name
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
-            if (type == MEDIA_TYPE_IMAGE){
+            if (type == MEDIA_TYPE_IMAGE) {
                 mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                        "IMG_"+ timeStamp + ".jpg");
-            } else if(type == MEDIA_TYPE_VIDEO) {
+                        "IMG_" + timeStamp + ".jpg");
+            } else if (type == MEDIA_TYPE_VIDEO) {
                 mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                        "VID_"+ timeStamp + ".mp4");
+                        "VID_" + timeStamp + ".mp4");
             } else {
                 return null;
             }
@@ -315,11 +395,11 @@ public class MainActivity extends AppCompatActivity
 
     /**
      * get the user address location
+     *
      * @param requestCode
      * @param permissions
      * @param grantResults
      */
-
 
 
     @Override
@@ -351,7 +431,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-// connect to api client before accessing location
+    // connect to api client before accessing location
     @Override
     protected void onStart() {
         super.onStart();
@@ -382,16 +462,15 @@ public class MainActivity extends AppCompatActivity
             try {
                 addresses = geocoder.getFromLocation(lat, lon, 1);
 
-                if(addresses != null) {
+                if (addresses != null) {
                     Address returnedAddress = addresses.get(0);
                     StringBuilder strReturnedAddress = new StringBuilder(" ");
-                    for(int i=0; i<returnedAddress.getMaxAddressLineIndex(); i++) {
+                    for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
                         strReturnedAddress.append(returnedAddress.getAddressLine(i)).append(" ");
                     }
                     myReturnedAddress = strReturnedAddress.toString();
-                    Toast.makeText(this,myReturnedAddress,Toast.LENGTH_LONG).show();
-                }
-                else{
+                    Toast.makeText(this, myReturnedAddress, Toast.LENGTH_LONG).show();
+                } else {
                     Toast.makeText(this, "No Address returned!", Toast.LENGTH_LONG).show();
                 }
             } catch (IOException e) {

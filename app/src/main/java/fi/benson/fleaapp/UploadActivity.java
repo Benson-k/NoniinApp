@@ -27,7 +27,6 @@ import fi.benson.fleaapp.models.Post;
 
 public class UploadActivity extends AppCompatActivity {
 
-    private String selectedImagePath = "";
     CollapsingToolbarLayout collapsingToolbarLayout;
     ImageView postimage;
     EditText editText_title, editText_desc, editText_price, editText_password, editText_phone;
@@ -35,6 +34,7 @@ public class UploadActivity extends AppCompatActivity {
     String theUrl;
     Bitmap thebitmap;
     String address;
+    private String selectedImagePath = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,23 +50,14 @@ public class UploadActivity extends AppCompatActivity {
         int image_from = getIntent().getIntExtra("image_from", 0);
         extractImage(extras, image_from);
 
-
-
-         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbarLayout.setTitle("Flea App");
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
-
-       
-
-
 
         editText_desc = (EditText) findViewById(R.id.et_desc);
         editText_title = (EditText) findViewById(R.id.et_title);
         editText_price = (EditText) findViewById(R.id.et_price);
         submit = (Button) findViewById(R.id.btn_post);
-
-
-
 
         uploadit();
 
@@ -74,13 +65,9 @@ public class UploadActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dataObjectUpload();
-                Intent intent = new Intent(UploadActivity.this, MainActivity.class);
-                startActivity(intent);
-                finish();
+
             }
         });
-
-
 
     }
 
@@ -134,7 +121,7 @@ public class UploadActivity extends AppCompatActivity {
     }
 
     //SAVE IMAGE ASYNC
-    private void uploadit(){
+    private void uploadit() {
         String picName = UUID.randomUUID().toString();
         Backendless.Files.Android.upload(thebitmap, Bitmap.CompressFormat.PNG, 100, picName + ".png", "postImages", new AsyncCallback<BackendlessFile>() {
 
@@ -154,9 +141,9 @@ public class UploadActivity extends AppCompatActivity {
 
 
     // save object asynchronously
-    private void dataObjectUpload(){
+    private void dataObjectUpload() {
 
-        final Post post =new Post();
+        final Post post = new Post();
         post.setTitle(editText_title.getText().toString());
         post.setPrice(Integer.parseInt(editText_price.getText().toString()));
         post.setDescription(editText_desc.getText().toString());
@@ -166,6 +153,9 @@ public class UploadActivity extends AppCompatActivity {
         Backendless.Persistence.save(post, new AsyncCallback<Post>() {
             public void handleResponse(Post response) {
                 Toast.makeText(UploadActivity.this, " data success", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(UploadActivity.this, MainActivity.class);
+                startActivity(intent);
+                finish();
 
             }
 
