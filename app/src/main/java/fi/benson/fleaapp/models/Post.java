@@ -17,6 +17,16 @@ public class Post {
     private String objectId;
     private  double latitude;
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    private String category;
+
     public double getLatitude() {
         return latitude;
     }

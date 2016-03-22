@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:showIn="@layout/activity_scrolling"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="fi.benson.fleaapp.ScrollingActivity">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="fi.benson.fleaapp.ScrollingActivity"
+    tools:showIn="@layout/activity_detail">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -23,8 +22,8 @@
                 android:id="@+id/placeNameHolder"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:orientation="vertical"
                 android:background="@color/colorPrimaryDark"
+                android:orientation="vertical"
                 android:transitionName="tNameHolder">
 
                 <TextView
@@ -32,12 +31,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:paddingTop="10dp"
                     android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
                     android:text="Name"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@android:color/white" />
-
 
 
             </LinearLayout>
@@ -59,8 +57,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_margin="16dp"
-                android:clickable="true"
                 android:background="@color/colorPrimaryDark"
+                android:clickable="true"
                 android:src="@drawable/ic_menu_share"
 
                 app:actionProviderClass="me.kentin.yeti.YetiActionProvider"
@@ -81,33 +79,47 @@
                 android:paddingBottom="10dp"
                 android:text="Desc" />
 
+            <TextView
+                android:id="@+id/detail_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="15dp"
+                android:layout_marginLeft="15dp"
+                android:paddingBottom="10dp"
+                android:text="Desc" />
+
+            <TextView
+                android:id="@+id/detail_created"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:paddingBottom="10dp"
+                android:text="Desc" />
 
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/profile_image"
-                android:layout_marginTop="30dp"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
                 android:src="@drawable/duck"
-                app:civ_border_width="1dp"
-                app:civ_border_color="#FFFFFFFF" />
+                app:civ_border_color="#FFFFFFFF"
+                app:civ_border_width="1dp" />
 
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:paddingTop="@dimen/nav_header_vertical_spacing"
                 android:paddingBottom="@dimen/nav_header_vertical_spacing"
+                android:paddingTop="@dimen/nav_header_vertical_spacing"
                 android:text="Duck Seller"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
 
-
             <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:map="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/map"
 
@@ -115,7 +127,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 tools:context="fi.benson.myapplication.MapsActivity" />
-
 
 
         </LinearLayout>

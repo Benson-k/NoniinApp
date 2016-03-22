@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -19,11 +20,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.files.BackendlessFile;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.util.List;
 import java.util.Locale;
@@ -47,8 +50,14 @@ public class UploadActivity extends AppCompatActivity {
     double latitude, longitude;
     String address;
 
+
+
     private String selectedImagePath = "";
+    String category;
     private CoordinatorLayout coordinatorLayout;
+    TextView tv;
+
+
 
 
     @Override
@@ -56,7 +65,7 @@ public class UploadActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
 
-
+    ;
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayoutUpload);
         postimage = (ImageView) findViewById(R.id.imageViewdetail);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
@@ -66,7 +75,27 @@ public class UploadActivity extends AppCompatActivity {
         int image_from = getIntent().getIntExtra("image_from", 0);
         extractImage(extras, image_from);
 
+        String[] list = getResources().getStringArray(R.array.categories);
+        MaterialSpinner spinner = (MaterialSpinner) findViewById(R.id.spinner1);
+        spinner.setItems(list);
+        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+
+            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+                category = item;
+
+            }
+        });
+        spinner.setOnNothingSelectedListener(new MaterialSpinner.OnNothingSelectedListener() {
+
+            @Override
+            public void onNothingSelected(MaterialSpinner spinner) {
+                Snackbar.make(spinner, "Nothing selected", Snackbar.LENGTH_LONG).show();
+            }
+        });
+
+
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        assert collapsingToolbarLayout != null;
         collapsingToolbarLayout.setTitle("Flea App");
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
 
@@ -74,17 +103,24 @@ public class UploadActivity extends AppCompatActivity {
         editText_title = (EditText) findViewById(R.id.et_title);
         editText_price = (EditText) findViewById(R.id.et_price);
         submit = (Button) findViewById(R.id.btn_post);
-
-        getLocation();
-        uploadit();
-
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dataObjectUpload();
+                if (category.equals("Pick category")){
+                    tv = (TextView) findViewById(R.id.textView8);
+                    tv.setTextColor(Color.parseColor("#FF0000"));
+                    Snackbar.make(coordinatorLayout, "Please pick a category", Snackbar.LENGTH_LONG).show();
+                }else {
+                    dataObjectUpload();
+                }
+
 
             }
         });
+        getLocation();
+        uploadit();
+
+
 
     }
 
@@ -140,7 +176,7 @@ public class UploadActivity extends AppCompatActivity {
     //SAVE IMAGE ASYNC
     private void uploadit() {
         String picName = UUID.randomUUID().toString();
-        Backendless.Files.Android.upload(thebitmap, Bitmap.CompressFormat.PNG, 100, picName + ".png", "postImages", new AsyncCallback<BackendlessFile>() {
+        Backendless.Files.Android.upload(thebitmap, Bitmap.CompressFormat.PNG, 100, picName + ".png", "postImagesDebug", new AsyncCallback<BackendlessFile>() {
 
             @Override
             public void handleResponse(final BackendlessFile backendlessFile) {
@@ -220,6 +256,7 @@ public class UploadActivity extends AppCompatActivity {
         post.setUrl(theUrl);
         post.setLatitude(latitude);
         post.setLongitude(longitude);
+        post.setCategory(category);
 
 
         Backendless.Persistence.save(post, new AsyncCallback<Post>() {

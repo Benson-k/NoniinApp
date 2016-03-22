@@ -18,13 +18,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 import com.vstechlab.easyfonts.EasyFonts;
 
+import java.util.Date;
+
 import me.kentin.yeti.Yeti;
 import me.kentin.yeti.listener.OnShareListener;
 
 public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback  {
 
     ImageView dImageView;
-    TextView dTextView, dPriceView, dDescView;
+    TextView dTextView, dPriceView, dDescView, dCategoryView, dCreatedView;
     private GoogleMap mMap;
 
     FloatingActionButton floatingActionButton;
@@ -61,6 +63,8 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         dDescView = (TextView) findViewById(R.id.detail_desc);
         dPriceView = (TextView) findViewById(R.id.detail_price);
         dImageView = (ImageView) findViewById(R.id.detail_image);
+        dCategoryView = (TextView) findViewById(R.id.detail_category);
+        dCreatedView = (TextView) findViewById(R.id.detail_created);
 
         Picasso.with(this).load(getIntent().getStringExtra("url")).into(dImageView);
 
@@ -71,6 +75,14 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
 
         dDescView.setText(getIntent().getStringExtra("desc"));
         dDescView.setTypeface(EasyFonts.droidSerifItalic(this));
+
+        dCategoryView.setText("Category : " + getIntent().getStringExtra("category"));
+        dCategoryView.setTypeface(EasyFonts.ostrichBlack(this));
+
+        Date date = new Date();
+        date.setTime(getIntent().getLongExtra("date", -1));
+        dCreatedView.setText("Created on : "+date.toString());
+        dCreatedView.setTypeface(EasyFonts.ostrichBlack(this));
 
     }
 

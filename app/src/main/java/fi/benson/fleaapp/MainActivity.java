@@ -58,19 +58,43 @@ public class MainActivity extends AppCompatActivity
 
 
     public String myReturnedAddress;
-
+    MaterialSearchView searchView;
+    CoordinatorLayout coordinatorLayout;
     private PostAdapter adapter;
     private List<Post> posts = new ArrayList<>();
     private BackendlessCollection<Post> post;
     private RecyclerView recycler;
     private Uri fileUri;
-
-
     private boolean isListView = true;
-    MaterialSearchView searchView;
-    CoordinatorLayout coordinatorLayout;
     private StaggeredGridLayoutManager mStaggeredLayoutManager;
 
+    /**
+     * Create a File for saving an image or video
+     */
+    private static File getOutputMediaFile() {
+
+        // External sdcard location
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), Defaults.IMAGE_DIRECTORY_NAME);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d(Defaults.IMAGE_DIRECTORY_NAME, "Oops! Failed create "
+                        + Defaults.IMAGE_DIRECTORY_NAME + " directory");
+                return null;
+            }
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+        File mediaFile = null;
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                + "IMG_" + timeStamp + ".png");
+        return mediaFile;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +153,6 @@ public class MainActivity extends AppCompatActivity
                 return false;
             }
         });
-
 
 
     }
@@ -207,7 +230,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -218,7 +240,6 @@ public class MainActivity extends AppCompatActivity
 
         return true;
     }
-
 
     public void materialSearch() {
 
@@ -314,7 +335,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
     /***
      * Get the image below
      */
@@ -347,36 +367,6 @@ public class MainActivity extends AppCompatActivity
 
         return Uri.fromFile(getOutputMediaFile());
     }
-
-
-    /**
-     * Create a File for saving an image or video
-     */
-    private static File getOutputMediaFile() {
-
-        // External sdcard location
-        File mediaStorageDir = new File(
-                Environment
-                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), Defaults.IMAGE_DIRECTORY_NAME);
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                Log.d(Defaults.IMAGE_DIRECTORY_NAME, "Oops! Failed create "
-                        + Defaults.IMAGE_DIRECTORY_NAME + " directory");
-                return null;
-            }
-        }
-
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
-                Locale.getDefault()).format(new Date());
-        File mediaFile = null;
-        mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                + "IMG_" + timeStamp + ".png");
-        return mediaFile;
-    }
-
 
     public void checkPermisions() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
@@ -431,7 +421,6 @@ public class MainActivity extends AppCompatActivity
 
         }
     }
-
 
 
 }

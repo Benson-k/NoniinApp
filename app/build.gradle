@@ -34,4 +34,5 @@ dependencies {
     compile 'io.github.yavski:fab-speed-dial:1.0.3'
     compile 'me.kentin:yeti:1.1.0'
     compile 'com.jenzz:materialpreference:1.3'
+    compile 'com.jaredrummler:material-spinner:1.0.5'
 }
