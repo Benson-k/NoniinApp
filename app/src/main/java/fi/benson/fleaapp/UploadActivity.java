@@ -176,7 +176,7 @@ public class UploadActivity extends AppCompatActivity {
     //SAVE IMAGE ASYNC
     private void uploadit() {
         String picName = UUID.randomUUID().toString();
-        Backendless.Files.Android.upload(thebitmap, Bitmap.CompressFormat.PNG, 100, picName + ".png", "postImagesDebug", new AsyncCallback<BackendlessFile>() {
+        Backendless.Files.Android.upload(thebitmap, Bitmap.CompressFormat.PNG, 100, picName + ".png", "postImages", new AsyncCallback<BackendlessFile>() {
 
             @Override
             public void handleResponse(final BackendlessFile backendlessFile) {
