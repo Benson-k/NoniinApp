@@ -16,9 +16,9 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/profile_image"
         android:layout_marginTop="30dp"
-        android:layout_width="55dp"
-        android:layout_height="55dp"
-        android:src="@drawable/ic_launcher"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/duck"
         app:civ_border_width="1dp"
         app:civ_border_color="#FFFFFFFF" />
 
@@ -27,13 +27,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:text="Android Studio"
+        android:text="Duck Face"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="android.studio@android.com" />
+        android:text="duck.face@utu.fi" />
 
 </LinearLayout>

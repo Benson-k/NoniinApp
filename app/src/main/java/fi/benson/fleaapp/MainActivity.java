@@ -3,9 +3,6 @@ package fi.benson.fleaapp;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,8 +18,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -34,13 +31,9 @@ import com.backendless.BackendlessCollection;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,8 +47,7 @@ import io.github.yavski.fabspeeddial.FabSpeedDial;
 import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
@@ -63,32 +55,38 @@ public class MainActivity extends AppCompatActivity
     private static final int PERMISSION_ACCESS_COARSE_LOCATION = 201;
     private static final int PERMISSION_ACCESS_CAMERA = 202;
     private static final int PERMISSION_ACCESS_STORAGE = 203;
+
+
     public String myReturnedAddress;
-    Geocoder geocoder;
-    List<Address> addresses;
+
+
+
     private PostAdapter adapter;
     private List<Post> posts = new ArrayList<>();
-    private  BackendlessCollection<Post> post;
+    private BackendlessCollection<Post> post;
     private RecyclerView recycler;
     private Uri fileUri;
-    private GoogleApiClient googleApiClient;
+
+
+    private boolean isListView = true;
     MaterialSearchView searchView;
     CoordinatorLayout coordinatorLayout;
-
+    private StaggeredGridLayoutManager mStaggeredLayoutManager;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorlayout);
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorlayout);
 
         pullDataFromServer();
         materialSearch();
 
-        recycler = (RecyclerView) findViewById(R.id.listTwo);
+        recycler = (RecyclerView) findViewById(R.id.mainRecycler);
+        mStaggeredLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         recycler.setItemAnimator(new DefaultItemAnimator());
-        recycler.setLayoutManager(new LinearLayoutManager(this));
+        recycler.setLayoutManager(mStaggeredLayoutManager);
         recycler.setHasFixedSize(true);
         adapter = new PostAdapter(this, posts);
         recycler.setAdapter(adapter);
@@ -107,12 +105,14 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        checkPermisions();
+
         FabSpeedDial fabSpeedDial = (FabSpeedDial) findViewById(R.id.fabspeed);
         assert fabSpeedDial != null;
         fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
             @Override
             public boolean onPrepareMenu(NavigationMenu navigationMenu) {
-                // TODO: Do something with yout menu items, or return false if you don't want to show them
+                checkPermisions();
                 return true;
             }
 
@@ -122,15 +122,10 @@ public class MainActivity extends AppCompatActivity
 
 
                 if (id == R.id.action_manage) {
-                    Intent lintent = new Intent(MainActivity.this, MapsActivity.class);
-                    startActivity(lintent);
+                    pickFromGallery();
                 } else if (id == R.id.action_gallery) {
-                    Intent intent = new Intent();
-                    intent.setType("image/*");
-                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                    startActivityForResult(Intent.createChooser(intent, ""), Defaults.PICK_IMAGE);
+                    pickFromGallery();
                 } else if (id == R.id.action_camera) {
-
                     captureImage();
                 }
                 return false;
@@ -138,23 +133,6 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    PERMISSION_ACCESS_COARSE_LOCATION);
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
-                    PERMISSION_ACCESS_CAMERA);
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    PERMISSION_ACCESS_STORAGE);
-        }
-
-        googleApiClient = new GoogleApiClient.Builder(this, this, this).addApi(LocationServices.API).build();
 
     }
 
@@ -162,6 +140,7 @@ public class MainActivity extends AppCompatActivity
         posts.addAll(nextPage.getCurrentPage());
         adapter.notifyDataSetChanged();
     }
+
     private void clearItems() {
         posts.clear();
         adapter.notifyDataSetChanged();
@@ -206,8 +185,14 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onResume() {
-        adapter.notifyDataSetChanged();
         super.onResume();
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -237,7 +222,7 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-    public void materialSearch(){
+    public void materialSearch() {
 
         searchView = (MaterialSearchView) findViewById(R.id.search_view);
         assert searchView != null;
@@ -292,9 +277,6 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-
-
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -302,23 +284,19 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         Intent intent;
 
-        if (id == R.id.nav_camera) {
-            intent = new Intent(MainActivity.this, MapsActivity.class);
+        if (id == R.id.nav_profile) {
+            // Handle the camera action
+        } else if (id == R.id.nav_favorite) {
+
+        } else if (id == R.id.nav_settings) {
+            intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_search) {
 
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-            //intent = new Intent(MainActivity.this, SettingsActivity.class);
-            //startActivity(intent);
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-
-
+        } else if (id == R.id.nav_list) {
+            toggle();
+        } else if (id == R.id.nav_grid) {
+            toggle();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -326,15 +304,37 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    // Toggle btwn grid n list views
+    private void toggle() {
+
+        if (isListView) {
+            mStaggeredLayoutManager.setSpanCount(2);
+            isListView = false;
+        } else {
+            mStaggeredLayoutManager.setSpanCount(1);
+            isListView = true;
+        }
+    }
+
+
     /***
      * Get the image below
      */
+
+    private void pickFromGallery() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, ""), Defaults.PICK_IMAGE);
+        }
+    }
 
     private void captureImage() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
 
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            fileUri = getOutputMediaFileUri(1);
+            fileUri = getOutputMediaFileUri();
             intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
             // start the image capture Intent
             startActivityForResult(intent, Defaults.CAPTURE_IMAGE);
@@ -345,53 +345,58 @@ public class MainActivity extends AppCompatActivity
     /**
      * Create a file Uri for saving an image or video
      */
-    private Uri getOutputMediaFileUri(int type) {
+    public Uri getOutputMediaFileUri() {
 
-
-        return Uri.fromFile(getOutputMediaFile(type));
+        return Uri.fromFile(getOutputMediaFile());
     }
+
 
     /**
      * Create a File for saving an image or video
      */
-    private File getOutputMediaFile(int type) {
-        File mediaFile = null;
+    private static File getOutputMediaFile() {
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-            // To be safe, you should check that the SDCard is mounted
-            // using Environment.getExternalStorageState() before doing this.
+        // External sdcard location
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), Defaults.IMAGE_DIRECTORY_NAME);
 
-            File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES), "MyCameraApp");
-            // This location works best if you want the created images to be shared
-            // between applications and persist after your app has been uninstalled.
-
-            // Create the storage directory if it does not exist
-            if (!mediaStorageDir.exists()) {
-                if (!mediaStorageDir.mkdirs()) {
-                    Log.d("MyCameraApp", "failed to create directory");
-                    return null;
-                }
-            }
-
-            // Create a media file name
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-
-            if (type == MEDIA_TYPE_IMAGE) {
-                mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                        "IMG_" + timeStamp + ".jpg");
-            } else if (type == MEDIA_TYPE_VIDEO) {
-                mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                        "VID_" + timeStamp + ".mp4");
-            } else {
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d(Defaults.IMAGE_DIRECTORY_NAME, "Oops! Failed create "
+                        + Defaults.IMAGE_DIRECTORY_NAME + " directory");
                 return null;
             }
-
-
         }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+        File mediaFile = null;
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                + "IMG_" + timeStamp + ".png");
         return mediaFile;
     }
 
+
+    public void checkPermisions() {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    PERMISSION_ACCESS_COARSE_LOCATION);
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA},
+                    PERMISSION_ACCESS_CAMERA);
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    PERMISSION_ACCESS_STORAGE);
+        }
+    }
 
     /**
      * get the user address location
@@ -400,8 +405,6 @@ public class MainActivity extends AppCompatActivity
      * @param permissions
      * @param grantResults
      */
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
@@ -431,67 +434,6 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    // connect to api client before accessing location
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (googleApiClient != null) {
-            googleApiClient.connect();
-        }
-    }
-
-    //stop the API connection after retrieving address
-    @Override
-    protected void onStop() {
-        googleApiClient.disconnect();
-        super.onStop();
-    }
-
-    //after connecting, get latitude n longitude and from the two, retieve the address, set it to string myReturnedAddress
-    @Override
-    public void onConnected(Bundle bundle) {
-        Log.i(MainActivity.class.getSimpleName(), "Connected to Google Play Services!");
-
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            Location lastLocation = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-
-            double lat = lastLocation.getLatitude(), lon = lastLocation.getLongitude();
-
-            geocoder = new Geocoder(this, Locale.ENGLISH);
-
-            try {
-                addresses = geocoder.getFromLocation(lat, lon, 1);
-
-                if (addresses != null) {
-                    Address returnedAddress = addresses.get(0);
-                    StringBuilder strReturnedAddress = new StringBuilder(" ");
-                    for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
-                        strReturnedAddress.append(returnedAddress.getAddressLine(i)).append(" ");
-                    }
-                    myReturnedAddress = strReturnedAddress.toString();
-                    Toast.makeText(this, myReturnedAddress, Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(this, "No Address returned!", Toast.LENGTH_LONG).show();
-                }
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                Toast.makeText(this, "Canont get Address!", Toast.LENGTH_LONG).show();
-            }
-
-
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.i(MainActivity.class.getSimpleName(), "Can't connect to Google Play Services!");
-    }
 
 
 }

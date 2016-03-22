@@ -4,37 +4,52 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.files.BackendlessFile;
 
+import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
+import fi.benson.fleaapp.location.LocationTracker;
+import fi.benson.fleaapp.location.UserLocation;
 import fi.benson.fleaapp.models.Post;
 
 public class UploadActivity extends AppCompatActivity {
 
     CollapsingToolbarLayout collapsingToolbarLayout;
     ImageView postimage;
-    EditText editText_title, editText_desc, editText_price, editText_password, editText_phone;
+    EditText editText_title, editText_desc, editText_price;
     Button submit;
     String theUrl;
     Bitmap thebitmap;
+
+
+    LocationTracker tracker;
+    double latitude, longitude;
     String address;
+
     private String selectedImagePath = "";
+    private CoordinatorLayout coordinatorLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +57,7 @@ public class UploadActivity extends AppCompatActivity {
         setContentView(R.layout.activity_upload);
 
 
+        coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorLayoutUpload);
         postimage = (ImageView) findViewById(R.id.imageViewdetail);
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
@@ -59,6 +75,7 @@ public class UploadActivity extends AppCompatActivity {
         editText_price = (EditText) findViewById(R.id.et_price);
         submit = (Button) findViewById(R.id.btn_post);
 
+        getLocation();
         uploadit();
 
         submit.setOnClickListener(new View.OnClickListener() {
@@ -127,21 +144,73 @@ public class UploadActivity extends AppCompatActivity {
 
             @Override
             public void handleResponse(final BackendlessFile backendlessFile) {
-                Toast.makeText(UploadActivity.this, "image success" + backendlessFile.getFileURL(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(UploadActivity.this, "image success" + backendlessFile.getFileURL(), Toast.LENGTH_SHORT).show();
                 theUrl = backendlessFile.getFileURL();
             }
 
             @Override
             public void handleFault(BackendlessFault backendlessFault) {
-                Toast.makeText(UploadActivity.this, backendlessFault.toString(), Toast.LENGTH_LONG).show();
+                Snackbar.make(coordinatorLayout, backendlessFault.toString(), Snackbar.LENGTH_LONG).show();
             }
         });
 
     }
 
+    public void getLocation(){
+        tracker=new LocationTracker(UploadActivity.this);
+
+        // check if location is available
+        if(tracker.isLocationEnabled)
+        {
+            latitude=tracker.getLatitude();
+            longitude=tracker.getLongitude();
+            address = getCompleteAddressString(latitude, longitude);
+
+            UserLocation userLocation = new UserLocation();
+            userLocation.setLatitude(latitude);
+            userLocation.setLongitude(longitude);
+            userLocation.setAddress(address);
+
+        }
+        else
+        {
+            // show dialog box to user to enable location
+            tracker.askToOnLocation();
+        }
+    }
+
+    private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
+        String strAdd = "";
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder
+                    .getFromLocation(LATITUDE, LONGITUDE, 1);
+            if (addresses != null) {
+                android.location.Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder("");
+
+                for (int i = 0; i < returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress
+                            .append(returnedAddress.getAddressLine(i)).append(
+                            "\n");
+                }
+                strAdd = strReturnedAddress.toString();
+                Log.w(" location address", "" + strReturnedAddress.toString());
+            } else {
+                Log.w(" location address", "No Address returned!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.w(" location address", "Cannot get Address!");
+        }
+        return strAdd;
+    }
+
 
     // save object asynchronously
     private void dataObjectUpload() {
+        UserLocation userLocation = new UserLocation();
+
 
         final Post post = new Post();
         post.setTitle(editText_title.getText().toString());
@@ -149,10 +218,12 @@ public class UploadActivity extends AppCompatActivity {
         post.setDescription(editText_desc.getText().toString());
         post.setAddress(address);
         post.setUrl(theUrl);
+        post.setLatitude(latitude);
+        post.setLongitude(longitude);
+
 
         Backendless.Persistence.save(post, new AsyncCallback<Post>() {
             public void handleResponse(Post response) {
-                Toast.makeText(UploadActivity.this, " data success", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(UploadActivity.this, MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -160,8 +231,15 @@ public class UploadActivity extends AppCompatActivity {
             }
 
             public void handleFault(BackendlessFault fault) {
-                Toast.makeText(UploadActivity.this, fault.toString(), Toast.LENGTH_LONG).show();
+                Snackbar.make(coordinatorLayout, fault.toString(), Snackbar.LENGTH_LONG).show();
             }
         });
     }
+
+
+
+
+
+
+
 }
