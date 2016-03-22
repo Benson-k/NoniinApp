@@ -59,8 +59,6 @@ public class MainActivity extends AppCompatActivity
 
     public String myReturnedAddress;
 
-
-
     private PostAdapter adapter;
     private List<Post> posts = new ArrayList<>();
     private BackendlessCollection<Post> post;
