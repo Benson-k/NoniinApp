@@ -24,6 +24,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
@@ -40,6 +41,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import fi.benson.fleaapp.adapters.ExpandableListAdapter;
 import fi.benson.fleaapp.adapters.PostAdapter;
 import fi.benson.fleaapp.defaults.Defaults;
 import fi.benson.fleaapp.models.Post;
@@ -68,6 +70,8 @@ public class MainActivity extends AppCompatActivity
     private boolean isListView = true;
     private StaggeredGridLayoutManager mStaggeredLayoutManager;
 
+    private static ExpandableListView expandableListView;
+    private static ExpandableListAdapter drawerAdapter;
     /**
      * Create a File for saving an image or video
      */
@@ -112,6 +116,14 @@ public class MainActivity extends AppCompatActivity
         recycler.setHasFixedSize(true);
         adapter = new PostAdapter(this, posts);
         recycler.setAdapter(adapter);
+
+
+        expandableListView = (ExpandableListView) findViewById(R.id.simple_expandable_listview);
+        // Setting group indicator null for custom indicator
+        expandableListView.setGroupIndicator(null);
+
+        setItems();
+        setListener();
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -300,23 +312,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        int id = item.getItemId();
-        Intent intent;
 
-        if (id == R.id.nav_profile) {
-            // Handle the camera action
-        } else if (id == R.id.nav_favorite) {
-
-        } else if (id == R.id.nav_settings) {
-            intent = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_search) {
-
-        } else if (id == R.id.nav_list) {
-            toggle();
-        } else if (id == R.id.nav_grid) {
-            toggle();
-        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
