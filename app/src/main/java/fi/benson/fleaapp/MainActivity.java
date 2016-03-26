@@ -24,6 +24,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
@@ -41,7 +42,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import fi.benson.fleaapp.adapters.ExpandableListAdapter;
 import fi.benson.fleaapp.adapters.PostAdapter;
 import fi.benson.fleaapp.defaults.Defaults;
 import fi.benson.fleaapp.models.Post;
@@ -57,11 +57,12 @@ public class MainActivity extends AppCompatActivity
     private static final int PERMISSION_ACCESS_COARSE_LOCATION = 201;
     private static final int PERMISSION_ACCESS_CAMERA = 202;
     private static final int PERMISSION_ACCESS_STORAGE = 203;
-
-
+    private static ExpandableListView expandableListView;
+    private static ExpandableListAdapter drawerAdapter;
     public String myReturnedAddress;
     MaterialSearchView searchView;
     CoordinatorLayout coordinatorLayout;
+    NavigationView navigationView;
     private PostAdapter adapter;
     private List<Post> posts = new ArrayList<>();
     private BackendlessCollection<Post> post;
@@ -70,8 +71,6 @@ public class MainActivity extends AppCompatActivity
     private boolean isListView = true;
     private StaggeredGridLayoutManager mStaggeredLayoutManager;
 
-    private static ExpandableListView expandableListView;
-    private static ExpandableListAdapter drawerAdapter;
     /**
      * Create a File for saving an image or video
      */
@@ -118,12 +117,7 @@ public class MainActivity extends AppCompatActivity
         recycler.setAdapter(adapter);
 
 
-        expandableListView = (ExpandableListView) findViewById(R.id.simple_expandable_listview);
-        // Setting group indicator null for custom indicator
-        expandableListView.setGroupIndicator(null);
 
-        setItems();
-        setListener();
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -136,8 +130,11 @@ public class MainActivity extends AppCompatActivity
 
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+      //  navigationView.inflateMenu(R.menu.activity_main_drawer);
         navigationView.setNavigationItemSelectedListener(this);
+       // drawer.closeDrawer(GravityCompat.START);
 
         checkPermisions();
 
@@ -167,6 +164,23 @@ public class MainActivity extends AppCompatActivity
         });
 
 
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_category) {
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.activity_submenu_drawer);
+        } else if (id == R.id.back_to_main) {
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.activity_main_drawer);
+        }
+
+        return true;
     }
 
     private void addMoreItems(BackendlessCollection<Post> nextPage) {
@@ -306,17 +320,6 @@ public class MainActivity extends AppCompatActivity
                 pullDataFromServer();
             }
         });
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     // Toggle btwn grid n list views

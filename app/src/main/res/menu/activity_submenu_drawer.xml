@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/back_to_main"
+        android:icon="@drawable/ic_arrow_back_white_48dp"
+        android:title="Go Back"/>
+
+    <item
+        android:id="@+id/sub_electronics"
+        android:icon="@drawable/technology"
+        android:title="Electronics" />
+    <item
+        android:id="@+id/sub_games"
+        android:icon="@drawable/games"
+        android:title="Games &amp; Console" />
+    <item
+        android:id="@+id/sub_cars"
+        android:icon="@drawable/transport"
+        android:title="Cars &amp; Motor" />
+
+    <item
+        android:id="@+id/sub_books"
+        android:icon="@drawable/technology"
+        android:title="Books &amp; Music" />
+    <item
+        android:id="@+id/sub_clothing"
+        android:icon="@drawable/games"
+        android:title="Clothing &amp; Fasion" />
+
+    <item
+        android:id="@+id/sub_sports"
+        android:icon="@drawable/tool"
+        android:title="Sports &amp; Leisure" />
+    <item
+        android:id="@+id/sub_home"
+        android:icon="@drawable/vintage"
+        android:title="Home  &amp; Garden" />
+
+</menu>

@@ -15,12 +15,12 @@
     <de.hdodenhof.circleimageview.CircleImageView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/profile_image"
-        android:layout_marginTop="30dp"
         android:layout_width="70dp"
         android:layout_height="70dp"
+        android:layout_marginTop="30dp"
         android:src="@drawable/duck"
-        app:civ_border_width="1dp"
-        app:civ_border_color="#FFFFFFFF" />
+        app:civ_border_color="#FFFFFFFF"
+        app:civ_border_width="1dp" />
 
 
     <TextView
@@ -35,84 +35,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="duck.face@utu.fi" />
-
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/nav_margin"
-        android:layout_marginRight="@dimen/text_margin"
-        android:layout_marginLeft="@dimen/nav_right"
-        android:layout_gravity="center"
-
-        android:minHeight="10dp">
-
-        <ImageView
-            android:id="@+id/drawer_icon1"
-            android:background="@drawable/ic_action_action_search"
-            android:layout_marginRight="@dimen/nav_margin"
-            android:layout_gravity="center_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:id="@+id/drawer_itemName1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="eeee"
-            android:textAppearance="?android:attr/textAppearanceLarge"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginRight="@dimen/text_margin"
-        android:layout_marginLeft="@dimen/nav_right"
-        android:layout_gravity="center"
-
-        android:minHeight="10dp">
-
-        <ImageView
-            android:id="@+id/drawer_icon"
-            android:background="@drawable/ic_action_action_search"
-            android:layout_marginRight="@dimen/nav_margin"
-            android:layout_gravity="center_vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:id="@+id/drawer_itemName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="eeee"
-            android:textAppearance="?android:attr/textAppearanceLarge"/>
-    </LinearLayout>
-
-
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="1dp"
-        android:layout_marginTop="1dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:background="#DADADC">
-    </View>
-
-    <ExpandableListView
-        android:id="@+id/simple_expandable_listview"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:divider="#000000"
-        android:dividerHeight="1dp" >
-    </ExpandableListView>
-
-
-
-
 
 </LinearLayout>
