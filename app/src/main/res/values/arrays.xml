@@ -10,4 +10,13 @@
         <item>Sports &amp; Leisure</item>
         <item>Home &amp; Garden</item>
     </string-array>
+
+    <string-array name="conditions">
+        <item>Choose Condition</item>
+        <item>New</item>
+        <item>Almost new</item>
+        <item>Good</item>
+        <item>Satisfactory</item>
+        <item>Poor</item>
+    </string-array>
 </resources>

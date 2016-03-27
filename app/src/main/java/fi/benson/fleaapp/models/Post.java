@@ -16,6 +16,11 @@ public class Post {
     private int price;
     private String objectId;
     private  double latitude;
+    private String condition;
+
+    public String getCondition() {return condition;}
+
+    public void setCondition(String condition) { this.condition = condition; }
 
     public String getCategory() {
         return category;

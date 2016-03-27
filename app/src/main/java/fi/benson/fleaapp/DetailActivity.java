@@ -26,7 +26,7 @@ import me.kentin.yeti.listener.OnShareListener;
 public class DetailActivity extends AppCompatActivity implements OnMapReadyCallback  {
 
     ImageView dImageView;
-    TextView dTextView, dPriceView, dDescView, dCategoryView, dCreatedView;
+    TextView dTextView, dPriceView, dDescView, dCategoryView, dCreatedView ,dConditionView;
     private GoogleMap mMap;
 
     FloatingActionButton floatingActionButton;
@@ -65,6 +65,7 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         dImageView = (ImageView) findViewById(R.id.detail_image);
         dCategoryView = (TextView) findViewById(R.id.detail_category);
         dCreatedView = (TextView) findViewById(R.id.detail_created);
+        dConditionView= (TextView) findViewById(R.id.detail_condition);
 
         Picasso.with(this).load(getIntent().getStringExtra("url")).into(dImageView);
 
@@ -76,12 +77,15 @@ public class DetailActivity extends AppCompatActivity implements OnMapReadyCallb
         dDescView.setText(getIntent().getStringExtra("desc"));
         dDescView.setTypeface(EasyFonts.droidSerifItalic(this));
 
-        dCategoryView.setText("Category : " + getIntent().getStringExtra("category"));
+        dCategoryView.setText( getIntent().getStringExtra("category"));
         dCategoryView.setTypeface(EasyFonts.ostrichBlack(this));
+
+        dConditionView.setText(getIntent().getStringExtra("condition"));
+        dConditionView.setTypeface(EasyFonts.ostrichBlack(this));
 
         Date date = new Date();
         date.setTime(getIntent().getLongExtra("date", -1));
-        dCreatedView.setText("Created on : "+date.toString());
+        dCreatedView.setText(date.toString());
         dCreatedView.setTypeface(EasyFonts.ostrichBlack(this));
 
     }

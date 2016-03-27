@@ -53,7 +53,8 @@ public class UploadActivity extends AppCompatActivity {
 
 
     private String selectedImagePath = "";
-    String category;
+    String category = "General";
+    String condition = "Good";
     private CoordinatorLayout coordinatorLayout;
     TextView tv;
 
@@ -75,6 +76,7 @@ public class UploadActivity extends AppCompatActivity {
         int image_from = getIntent().getIntExtra("image_from", 0);
         extractImage(extras, image_from);
 
+        //category spinner
         String[] list = getResources().getStringArray(R.array.categories);
         MaterialSpinner spinner = (MaterialSpinner) findViewById(R.id.spinner1);
         spinner.setItems(list);
@@ -82,7 +84,6 @@ public class UploadActivity extends AppCompatActivity {
 
             @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
                 category = item;
-
             }
         });
         spinner.setOnNothingSelectedListener(new MaterialSpinner.OnNothingSelectedListener() {
@@ -92,6 +93,26 @@ public class UploadActivity extends AppCompatActivity {
                 Snackbar.make(spinner, "Nothing selected", Snackbar.LENGTH_LONG).show();
             }
         });
+
+
+        //contion spinner
+        final String[] conditions = getResources().getStringArray(R.array.conditions);
+        MaterialSpinner conditionSpinner = (MaterialSpinner) findViewById(R.id.spinnerCondition);
+        conditionSpinner.setItems(conditions);
+        conditionSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+
+            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+                condition = item;
+            }
+        });
+        spinner.setOnNothingSelectedListener(new MaterialSpinner.OnNothingSelectedListener() {
+
+            @Override
+            public void onNothingSelected(MaterialSpinner spinner) {
+                Snackbar.make(spinner, "Nothing selected", Snackbar.LENGTH_LONG).show();
+            }
+        });
+
 
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
@@ -257,6 +278,7 @@ public class UploadActivity extends AppCompatActivity {
         post.setLatitude(latitude);
         post.setLongitude(longitude);
         post.setCategory(category);
+        post.setCondition(condition);
 
 
         Backendless.Persistence.save(post, new AsyncCallback<Post>() {

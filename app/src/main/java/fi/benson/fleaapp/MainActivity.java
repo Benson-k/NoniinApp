@@ -70,34 +70,9 @@ public class MainActivity extends AppCompatActivity
     private Uri fileUri;
     private boolean isListView = true;
     private StaggeredGridLayoutManager mStaggeredLayoutManager;
+    DrawerLayout drawer;
 
-    /**
-     * Create a File for saving an image or video
-     */
-    private static File getOutputMediaFile() {
 
-        // External sdcard location
-        File mediaStorageDir = new File(
-                Environment
-                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), Defaults.IMAGE_DIRECTORY_NAME);
-
-        // Create the storage directory if it does not exist
-        if (!mediaStorageDir.exists()) {
-            if (!mediaStorageDir.mkdirs()) {
-                Log.d(Defaults.IMAGE_DIRECTORY_NAME, "Oops! Failed create "
-                        + Defaults.IMAGE_DIRECTORY_NAME + " directory");
-                return null;
-            }
-        }
-
-        // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
-                Locale.getDefault()).format(new Date());
-        File mediaFile = null;
-        mediaFile = new File(mediaStorageDir.getPath() + File.separator
-                + "IMG_" + timeStamp + ".png");
-        return mediaFile;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +98,7 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -166,11 +141,52 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    public void reloadDrawerAndPullCategory(String category){
+        drawer.closeDrawer(GravityCompat.START);
+        navigationView.getMenu().clear();
+        navigationView.inflateMenu(R.menu.activity_main_drawer);
+
+        StringBuilder str = new StringBuilder("category = ");
+        str.append("'").append(category).append("'");
+
+        String whereClause = ""+str;
+        BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+        dataQuery.setWhereClause(whereClause);
+         Backendless.Persistence.of( Post.class ).find(dataQuery, new AsyncCallback<BackendlessCollection<Post>>() {
+             @Override
+             public void handleResponse(BackendlessCollection<Post> response) {
+                 clearItems();
+                 post = response;
+                 addMoreItems(response);
+             }
+
+             @Override
+            public void handleFault(BackendlessFault fault) {
+                 Snackbar.make(coordinatorLayout, fault.toString(), Snackbar.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
+
+    // Toggle btwn grid n list views
+    private void toggle() {
+
+        if (isListView) {
+            mStaggeredLayoutManager.setSpanCount(2);
+            isListView = false;
+        } else {
+            mStaggeredLayoutManager.setSpanCount(1);
+            isListView = true;
+        }
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        Intent intent;
 
         if (id == R.id.nav_category) {
             navigationView.getMenu().clear();
@@ -178,6 +194,43 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.back_to_main) {
             navigationView.getMenu().clear();
             navigationView.inflateMenu(R.menu.activity_main_drawer);
+        }else if (id == R.id.nav_profile){
+            drawer.closeDrawer(GravityCompat.START);
+        }else if (id == R.id.nav_settings){
+            intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
+            drawer.closeDrawer(GravityCompat.START);
+        }else if (id == R.id.nav_favorite){
+            drawer.closeDrawer(GravityCompat.START);
+        }else if (id == R.id.nav_search){
+            drawer.closeDrawer(GravityCompat.START);
+        }else if (id == R.id.nav_list){
+            toggle();
+            drawer.closeDrawer(GravityCompat.START);
+        }else if (id == R.id.nav_grid){
+            toggle();
+            drawer.closeDrawer(GravityCompat.START);
+        }else if (id == R.id.sub_electronics){
+            String category = "Electronics";
+            reloadDrawerAndPullCategory(category);
+        }else if (id == R.id.sub_games){
+            String category = "Games & Console";
+            reloadDrawerAndPullCategory(category);
+        }else if (id == R.id.sub_cars){
+            String category = "Books & Music";
+            reloadDrawerAndPullCategory(category);
+        }else if (id == R.id.sub_books){
+            String category = "Clothing & Fashion";
+            reloadDrawerAndPullCategory(category);
+        }else if (id == R.id.sub_clothing){
+            String category = "Cars & Motors";
+            reloadDrawerAndPullCategory(category);
+        }else if (id == R.id.sub_sports){
+            String category = "Sports & Leisure";
+            reloadDrawerAndPullCategory(category);
+        }else if (id == R.id.sub_home){
+            String category = "Home & Garden";
+            reloadDrawerAndPullCategory(category);
         }
 
         return true;
@@ -322,17 +375,6 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    // Toggle btwn grid n list views
-    private void toggle() {
-
-        if (isListView) {
-            mStaggeredLayoutManager.setSpanCount(2);
-            isListView = false;
-        } else {
-            mStaggeredLayoutManager.setSpanCount(1);
-            isListView = true;
-        }
-    }
 
     /***
      * Get the image below
@@ -357,6 +399,33 @@ public class MainActivity extends AppCompatActivity
             startActivityForResult(intent, Defaults.CAPTURE_IMAGE);
         }
 
+    }
+    /**
+     * Create a File for saving an image or video
+     */
+    private static File getOutputMediaFile() {
+
+        // External sdcard location
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), Defaults.IMAGE_DIRECTORY_NAME);
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d(Defaults.IMAGE_DIRECTORY_NAME, "Oops! Failed create "
+                        + Defaults.IMAGE_DIRECTORY_NAME + " directory");
+                return null;
+            }
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+        File mediaFile = null;
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                + "IMG_" + timeStamp + ".png");
+        return mediaFile;
     }
 
     /**

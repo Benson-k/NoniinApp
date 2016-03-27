@@ -33,7 +33,7 @@
                     android:layout_gravity="center_vertical"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
-                    android:text="Name"
+                    android:text="Title"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="@android:color/white" />
 
@@ -77,24 +77,110 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:paddingBottom="10dp"
-                android:text="Desc" />
+                android:text="Description" />
 
-            <TextView
-                android:id="@+id/detail_category"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="15dp"
-                android:layout_marginLeft="15dp"
-                android:paddingBottom="10dp"
-                android:text="Desc" />
 
-            <TextView
-                android:id="@+id/detail_created"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:paddingBottom="10dp"
-                android:text="Desc" />
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:paddingBottom="5dp"
+                        android:text="Category " />
+
+                    <TextView
+                        android:id="@+id/detail_category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="15dp"
+                        android:layout_marginLeft="@dimen/alert_dialog_button_bar_height"
+                        android:paddingBottom="5dp"
+                        android:text="Categoty" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:layout_marginLeft="15dp"
+                        android:paddingBottom="5dp"
+                        android:text="Condition " />
+
+                    <TextView
+                        android:id="@+id/detail_condition"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:layout_marginLeft="@dimen/alert_dialog_button_bar_height"
+                        android:paddingBottom="5dp"
+                        android:text="Condition" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:layout_marginLeft="15dp"
+                        android:paddingBottom="5dp"
+                        android:text="Created On " />
+
+                    <TextView
+                        android:id="@+id/detail_created"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="5dp"
+                        android:layout_marginLeft="40dp"
+                        android:paddingBottom="5dp"
+                        android:text="Created on" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
 
 
 

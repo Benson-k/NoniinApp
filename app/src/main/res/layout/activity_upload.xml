@@ -56,6 +56,16 @@
             android:orientation="vertical"
             android:layout_margin="10dp">
 
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:id="@+id/spinner1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:id="@+id/spinnerCondition"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
 
 
 
