@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity
         materialSearch();
 
         recycler = (RecyclerView) findViewById(R.id.mainRecycler);
-        mStaggeredLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+        mStaggeredLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         recycler.setItemAnimator(new DefaultItemAnimator());
         recycler.setLayoutManager(mStaggeredLayoutManager);
         recycler.setHasFixedSize(true);
@@ -203,6 +203,8 @@ public class MainActivity extends AppCompatActivity
         }else if (id == R.id.nav_favorite){
             drawer.closeDrawer(GravityCompat.START);
         }else if (id == R.id.nav_search){
+            intent = new Intent(MainActivity.this, AdvancedSearch.class);
+            startActivity(intent);
             drawer.closeDrawer(GravityCompat.START);
         }else if (id == R.id.nav_list){
             toggle();

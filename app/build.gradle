@@ -18,6 +18,10 @@ android {
         }
     }
 }
+repositories {
+    jcenter()
+    mavenCentral()
+}
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -37,4 +41,5 @@ dependencies {
     compile 'com.jaredrummler:material-spinner:1.0.5'
     compile 'com.flaviofaria:kenburnsview:1.0.7'
     compile 'com.joooonho:selectableroundedimageview:1.0.1'
+    compile 'com.appyvet:materialrangebar:1.3'
 }

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.vstechlab.easyfonts.EasyFonts;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,8 +51,8 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         // Picasso.with(context).load(post.getUrl()).into(holder.placeImage);
 
-     //   holder.placeName.setText(post.getTitle());
-     //   holder.placeName.setTypeface(EasyFonts.walkwayBlack(context));
+       holder.placeName.setText(post.getPrice()+" €");
+       holder.placeName.setTypeface(EasyFonts.droidSerifBold(context));
 
         Picasso.with(context)
                 .load(post.getUrl())
@@ -96,7 +97,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
             itemView.setOnClickListener(this);
             //Assign views by ID
         //    placeHolder = (LinearLayout) itemView.findViewById(R.id.mainHolder);
-        //    placeName = (TextView) itemView.findViewById(R.id.placeName);
+            placeName = (TextView) itemView.findViewById(R.id.placeName);
             placeNameHolder = (LinearLayout) itemView.findViewById(R.id.placeNameHolder);
             placeImage = (ImageView) itemView.findViewById(R.id.placeImage);
 
