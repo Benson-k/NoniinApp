@@ -33,4 +33,9 @@
         <item name="android:hint">@string/search_hint</item>
     </style>
 
+    <style name="SearchButton" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">#fff</item>
+    </style>
+
 </resources>
