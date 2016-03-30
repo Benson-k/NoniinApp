@@ -34,6 +34,7 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
+import com.yalantis.phoenix.PullToRefreshView;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -71,7 +72,9 @@ public class MainActivity extends AppCompatActivity
     private boolean isListView = true;
     private StaggeredGridLayoutManager mStaggeredLayoutManager;
     DrawerLayout drawer;
-
+    private int totalResults;
+    private int totalPosts;
+    private PullToRefreshView mPullToRefreshView;
 
 
     @Override
@@ -79,6 +82,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinatorlayout);
+
 
         pullDataFromServer();
         materialSearch();
@@ -90,6 +94,7 @@ public class MainActivity extends AppCompatActivity
         recycler.setHasFixedSize(true);
         adapter = new PostAdapter(this, posts);
         recycler.setAdapter(adapter);
+
 
 
 
@@ -112,6 +117,27 @@ public class MainActivity extends AppCompatActivity
        // drawer.closeDrawer(GravityCompat.START);
 
         checkPermisions();
+
+
+        //Pull to refresh
+        mPullToRefreshView = (PullToRefreshView) findViewById(R.id.pull_to_refresh);
+        mPullToRefreshView.setOnRefreshListener(new PullToRefreshView.OnRefreshListener() {
+
+            @Override
+            public void onRefresh() {
+
+                mPullToRefreshView.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        clearItems();
+                        pullDataFromServer();
+                        mPullToRefreshView.setRefreshing(false);
+                    }
+                }, 2000);
+
+            }
+        });
+
 
         FabSpeedDial fabSpeedDial = (FabSpeedDial) findViewById(R.id.fabspeed);
         assert fabSpeedDial != null;
@@ -141,32 +167,7 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public void reloadDrawerAndPullCategory(String category){
-        drawer.closeDrawer(GravityCompat.START);
-        navigationView.getMenu().clear();
-        navigationView.inflateMenu(R.menu.activity_main_drawer);
 
-        StringBuilder str = new StringBuilder("category = ");
-        str.append("'").append(category).append("'");
-
-        String whereClause = ""+str;
-        BackendlessDataQuery dataQuery = new BackendlessDataQuery();
-        dataQuery.setWhereClause(whereClause);
-         Backendless.Persistence.of( Post.class ).find(dataQuery, new AsyncCallback<BackendlessCollection<Post>>() {
-             @Override
-             public void handleResponse(BackendlessCollection<Post> response) {
-                 clearItems();
-                 post = response;
-                 addMoreItems(response);
-             }
-
-             @Override
-            public void handleFault(BackendlessFault fault) {
-                 Snackbar.make(coordinatorLayout, fault.toString(), Snackbar.LENGTH_LONG).show();
-            }
-        });
-
-    }
 
 
     // Toggle btwn grid n list views
@@ -241,6 +242,7 @@ public class MainActivity extends AppCompatActivity
     private void addMoreItems(BackendlessCollection<Post> nextPage) {
         posts.addAll(nextPage.getCurrentPage());
         adapter.notifyDataSetChanged();
+
     }
 
     private void clearItems() {
@@ -270,12 +272,16 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+
     public void pullDataFromServer() {
         Backendless.Persistence.of(Post.class).find(new AsyncCallback<BackendlessCollection<Post>>() {
             @Override
             public void handleResponse(BackendlessCollection<Post> foundPosts) {
+                totalPosts = foundPosts.getTotalObjects();
                 post = foundPosts;
                 addMoreItems(foundPosts);
+
+
             }
 
             @Override
@@ -283,6 +289,32 @@ public class MainActivity extends AppCompatActivity
                 Log.d("Post", "Error: " + fault.getMessage());
             }
         });
+    }
+    public void reloadDrawerAndPullCategory(String category) {
+        drawer.closeDrawer(GravityCompat.START);
+        navigationView.getMenu().clear();
+        navigationView.inflateMenu(R.menu.activity_main_drawer);
+
+        StringBuilder str = new StringBuilder("category = ");
+        str.append("'").append(category).append("'");
+
+        String whereClause = "" + str;
+        BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+        dataQuery.setWhereClause(whereClause);
+        Backendless.Persistence.of(Post.class).find(dataQuery, new AsyncCallback<BackendlessCollection<Post>>() {
+            @Override
+            public void handleResponse(BackendlessCollection<Post> response) {
+                clearItems();
+                post = response;
+                addMoreItems(response);
+            }
+
+            @Override
+            public void handleFault(BackendlessFault fault) {
+                Snackbar.make(coordinatorLayout, fault.toString(), Snackbar.LENGTH_LONG).show();
+            }
+        });
+
     }
 
     @Override
@@ -348,7 +380,7 @@ public class MainActivity extends AppCompatActivity
                 Backendless.Data.of(Post.class).find(dataQuery, new AsyncCallback<BackendlessCollection<Post>>() {
                     @Override
                     public void handleResponse(BackendlessCollection<Post> result) {
-
+                        totalResults = result.getTotalObjects();
                         clearItems();
                         post = result;
                         addMoreItems(result);
@@ -491,6 +523,5 @@ public class MainActivity extends AppCompatActivity
 
         }
     }
-
 
 }

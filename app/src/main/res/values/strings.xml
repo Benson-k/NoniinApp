@@ -7,95 +7,164 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_detail">DetailActivity</string>
-    <string name="large_text">
-        "Material is the metaphor.\n\n"
-
-        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
-        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
-        "technologically advanced and open to imagination and magic.\n"
-        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
-        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
-        "flexibility of the material creates new affordances that supercede those in the physical "
-        "world, without breaking the rules of physics.\n"
-        "The fundamentals of light, surface, and movement are key to conveying how objects move, "
-        "interact, and exist in space and in relation to each other. Realistic lighting shows "
-        "seams, divides space, and indicates moving parts.\n\n"
-
-        "Bold, graphic, intentional.\n\n"
-
-        "The foundational elements of print based design typography, grids, space, scale, color, "
-        "and use of imagery guide visual treatments. These elements do far more than please the "
-        "eye. They create hierarchy, meaning, and focus. Deliberate color choices, edge to edge "
-        "imagery, large scale typography, and intentional white space create a bold and graphic "
-        "interface that immerse the user in the experience.\n"
-        "An emphasis on user actions makes core functionality immediately apparent and provides "
-        "waypoints for the user.\n\n"
-
-        "Motion provides meaning.\n\n"
-
-        "Motion respects and reinforces the user as the prime mover. Primary user actions are "
-        "inflection points that initiate motion, transforming the whole design.\n"
-        "All action takes place in a single environment. Objects are presented to the user without "
-        "breaking the continuity of experience even as they transform and reorganize.\n"
-        "Motion is meaningful and appropriate, serving to focus attention and maintain continuity. "
-        "Feedback is subtle yet clear. Transitions are efﬁcient yet coherent.\n\n"
-
-        "3D world.\n\n"
-
-        "The material environment is a 3D space, which means all objects have x, y, and z "
-        "dimensions. The z-axis is perpendicularly aligned to the plane of the display, with the "
-        "positive z-axis extending towards the viewer. Every sheet of material occupies a single "
-        "position along the z-axis and has a standard 1dp thickness.\n"
-        "On the web, the z-axis is used for layering and not for perspective. The 3D world is "
-        "emulated by manipulating the y-axis.\n\n"
-
-        "Light and shadow.\n\n"
-
-        "Within the material environment, virtual lights illuminate the scene. Key lights create "
-        "directional shadows, while ambient light creates soft shadows from all angles.\n"
-        "Shadows in the material environment are cast by these two light sources. In Android "
-        "development, shadows occur when light sources are blocked by sheets of material at "
-        "various positions along the z-axis. On the web, shadows are depicted by manipulating the "
-        "y-axis only. The following example shows the card with a height of 6dp.\n\n"
-
-        "Resting elevation.\n\n"
-
-        "All material objects, regardless of size, have a resting elevation, or default elevation "
-        "that does not change. If an object changes elevation, it should return to its resting "
-        "elevation as soon as possible.\n\n"
-
-        "Component elevations.\n\n"
-
-        "The resting elevation for a component type is consistent across apps (e.g., FAB elevation "
-        "does not vary from 6dp in one app to 16dp in another app).\n"
-        "Components may have different resting elevations across platforms, depending on the depth "
-        "of the environment (e.g., TV has a greater depth than mobile or desktop).\n\n"
-
-        "Responsive elevation and dynamic elevation offsets.\n\n"
-
-        "Some component types have responsive elevation, meaning they change elevation in response "
-        "to user input (e.g., normal, focused, and pressed) or system events. These elevation "
-        "changes are consistently implemented using dynamic elevation offsets.\n"
-        "Dynamic elevation offsets are the goal elevation that a component moves towards, relative "
-        "to the component’s resting state. They ensure that elevation changes are consistent "
-        "across actions and component types. For example, all components that lift on press have "
-        "the same elevation change relative to their resting elevation.\n"
-        "Once the input event is completed or cancelled, the component will return to its resting "
-        "elevation.\n\n"
-
-        "Avoiding elevation interference.\n\n"
-
-        "Components with responsive elevations may encounter other components as they move between "
-        "their resting elevations and dynamic elevation offsets. Because material cannot pass "
-        "through other material, components avoid interfering with one another any number of ways, "
-        "whether on a per component basis or using the entire app layout.\n"
-        "On a component level, components can move or be removed before they cause interference. "
-        "For example, a floating action button (FAB) can disappear or move off screen before a "
-        "user picks up a card, or it can move if a snackbar appears.\n"
-        "On the layout level, design your app layout to minimize opportunities for interference. "
-        "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
-        "when a user tries to pick up one of cards.\n\n"
-    </string>
+   <string name="svg">
+       "M 892.00,0.00
+           C 892.00,0.00 892.00,895.00 892.00,895.00
+             892.00,895.00 0.00,895.00 0.00,895.00
+             0.00,895.00 0.00,0.00 0.00,0.00
+             0.00,0.00 892.00,0.00 892.00,0.00 Z
+           M 380.60,82.00
+           C 385.56,94.51 390.42,105.58 397.69,117.00
+             399.77,120.25 408.73,131.77 408.13,134.85
+             407.53,137.92 404.20,137.71 402.00,136.67
+             398.72,135.11 391.78,127.87 389.04,125.00
+             380.47,116.04 364.12,94.59 356.72,84.00
+             356.72,84.00 346.00,68.00 346.00,68.00
+             348.57,84.63 365.88,112.96 376.61,126.00
+             383.03,133.79 387.06,135.63 390.78,140.01
+             392.28,141.79 394.44,144.88 393.82,147.36
+             393.00,150.67 389.51,150.51 387.00,149.41
+             380.09,146.39 379.88,139.89 373.00,140.96
+             366.78,141.92 356.31,147.22 351.00,150.70
+             348.27,152.48 344.71,154.78 343.64,158.01
+             343.64,158.01 345.00,177.00 345.00,177.00
+             345.06,189.14 343.58,202.36 339.98,214.00
+             338.26,219.55 337.43,224.13 332.14,227.00
+             329.19,205.73 334.63,189.03 332.14,171.00
+             331.10,161.95 329.55,154.03 322.82,147.17
+             318.73,143.01 313.48,140.20 308.00,138.36
+             292.19,133.03 278.66,137.07 266.00,147.46
+             247.07,163.00 235.18,193.99 228.28,217.00
+             228.28,217.00 222.21,240.00 222.21,240.00
+             221.43,243.61 219.99,247.39 221.00,251.00
+             223.83,245.74 225.90,242.99 232.00,242.00
+             231.50,250.89 225.02,258.91 221.31,267.00
+             214.33,282.20 208.12,297.94 203.42,314.00
+             183.11,383.47 185.46,456.77 223.40,520.00
+             232.84,535.73 242.62,548.35 254.84,562.00
+             263.81,572.04 273.53,580.90 288.00,579.91
+             308.36,578.51 329.13,551.08 337.22,534.00
+             337.22,534.00 342.37,522.00 342.37,522.00
+             348.87,509.01 359.92,499.18 375.00,499.00
+             389.61,498.83 408.05,505.51 420.00,513.77
+             427.25,518.78 444.26,534.42 451.00,540.99
+             451.00,540.99 492.00,577.51 492.00,577.51
+             492.00,577.51 505.00,585.34 505.00,585.34
+             521.03,595.70 540.53,604.77 560.00,605.00
+             597.15,605.43 623.75,587.86 648.99,562.00
+             662.60,548.05 673.76,534.38 674.00,514.00
+             674.17,498.93 673.65,489.67 669.28,475.00
+             669.28,475.00 658.53,445.00 658.53,445.00
+             656.31,435.51 657.50,422.24 660.52,413.00
+             661.75,409.24 663.49,405.22 665.79,402.00
+             678.72,383.88 698.22,387.64 716.00,395.01
+             722.58,397.74 730.61,401.69 736.00,406.30
+             743.29,412.55 753.36,426.63 758.58,435.00
+             758.58,435.00 774.00,465.00 774.00,465.00
+             774.00,465.00 775.00,445.00 775.00,445.00
+             775.00,445.00 774.09,433.00 774.09,433.00
+             771.88,400.74 765.54,369.92 756.02,339.00
+             751.93,325.69 743.07,298.71 737.00,287.00
+             731.51,288.26 725.63,287.15 728.38,280.00
+             729.60,276.84 734.46,270.39 736.58,267.00
+             741.70,258.78 747.32,248.89 751.13,240.00
+             753.15,235.29 756.41,226.99 755.00,222.00
+             755.00,222.00 746.00,235.00 746.00,235.00
+             746.00,235.00 746.00,225.00 746.00,225.00
+             743.51,235.63 735.37,252.74 727.00,259.78
+             724.73,261.69 712.61,267.30 711.62,261.69
+             711.27,259.69 713.80,257.31 715.02,256.00
+             719.07,251.63 720.54,250.82 722.65,245.00
+             727.52,231.58 728.16,217.12 728.00,203.00
+             727.93,197.34 726.89,188.87 724.00,184.00
+             724.00,184.00 716.84,232.00 716.84,232.00
+             714.26,241.37 709.32,247.41 699.00,245.00
+             700.88,239.72 705.31,233.36 704.75,228.00
+             703.87,219.54 691.84,206.84 686.00,201.00
+             667.67,182.67 641.92,163.26 619.00,151.00
+             619.00,151.00 624.12,169.00 624.12,169.00
+             627.31,182.44 631.69,208.49 631.99,222.00
+             632.07,226.00 631.51,235.48 625.39,228.89
+             621.47,224.66 620.54,217.48 619.73,212.00
+             619.73,212.00 614.13,183.00 614.13,183.00
+             604.47,144.31 587.00,97.63 544.00,86.63
+             538.44,85.21 532.75,84.07 527.00,84.00
+             516.40,83.88 510.42,83.47 500.00,86.43
+             474.71,93.59 456.70,114.25 445.25,137.00
+             437.83,151.73 435.74,158.48 431.09,174.00
+             430.38,176.37 427.49,184.02 424.22,183.38
+             420.28,182.60 422.65,170.64 423.21,168.00
+             425.06,159.24 428.59,147.25 432.01,139.00
+             432.01,139.00 440.00,121.00 440.00,121.00
+             434.49,119.66 428.47,119.45 423.00,121.00
+             422.75,125.59 419.41,127.85 415.04,125.79
+             412.07,124.38 409.79,120.66 408.00,118.00
+             400.14,106.32 382.23,78.08 377.00,66.00
+             375.63,70.91 378.77,77.40 380.60,82.00 Z
+           M 569.98,201.00
+           C 564.00,181.74 554.56,167.49 535.00,160.06
+             531.55,158.76 523.53,156.34 520.00,156.10
+             502.15,154.88 490.57,178.03 485.00,192.00
+             485.00,192.00 479.64,204.94 479.64,204.94
+             478.60,206.57 476.72,208.98 474.49,207.83
+             471.87,206.48 471.94,200.53 472.04,198.00
+             472.51,185.98 478.25,170.05 486.18,161.00
+             503.02,141.81 531.34,136.19 553.00,150.75
+             572.19,163.65 584.90,190.01 585.00,213.00
+             585.03,219.04 585.81,227.74 579.00,230.00
+             572.65,217.60 573.76,213.22 569.98,201.00 Z
+           M 306.13,178.00
+           C 310.60,188.60 312.13,210.28 312.00,222.00
+             311.94,226.57 310.33,243.85 309.24,248.00
+             308.52,250.75 307.05,255.46 303.94,256.26
+             297.22,257.98 297.85,243.62 298.50,240.00
+             300.44,222.00 301.82,214.59 298.50,196.00
+             297.87,190.96 296.03,182.42 290.96,180.07
+             286.09,177.80 280.77,183.72 278.00,187.04
+             270.40,196.16 266.10,206.58 262.61,211.00
+             260.97,213.08 257.06,217.38 254.23,217.39
+             251.74,217.41 251.45,214.87 251.55,212.98
+             251.71,209.52 253.81,203.13 255.37,200.00
+             261.06,188.63 275.90,169.75 288.00,165.56
+             298.28,163.79 302.36,169.09 306.13,178.00 Z
+           M 305.96,411.00
+           C 319.94,425.62 329.76,457.88 330.00,478.00
+             330.00,478.00 330.00,487.00 330.00,487.00
+             329.99,492.55 329.20,500.93 321.00,496.97
+             321.00,496.97 305.00,484.16 305.00,484.16
+             292.21,474.85 276.77,470.41 262.00,477.98
+             254.52,481.81 247.08,489.26 242.16,496.00
+             239.11,500.17 237.05,506.89 231.00,506.89
+             222.46,506.89 223.01,492.18 223.00,486.00
+             223.00,486.00 223.00,468.00 223.00,468.00
+             223.04,443.24 234.56,414.70 257.00,402.31
+             262.43,399.31 265.95,397.81 272.00,396.46
+             285.17,394.68 297.17,401.80 305.96,411.00 Z
+           M 454.59,469.00
+           C 465.18,439.59 486.80,397.43 523.00,397.00
+             533.00,396.89 541.43,396.72 551.00,400.46
+             580.21,411.88 594.37,441.10 603.67,469.00
+             607.78,481.34 611.00,491.86 611.00,505.00
+             605.27,502.29 601.81,497.49 597.00,493.44
+             590.54,487.99 581.74,482.29 574.00,478.86
+             559.44,472.41 546.85,469.98 531.00,470.00
+             513.99,470.03 492.84,481.27 478.00,489.31
+             478.00,489.31 448.00,507.00 448.00,507.00
+             445.19,495.45 450.63,479.99 454.59,469.00 Z
+           M 508.00,493.00
+           C 521.81,488.36 549.90,486.12 561.82,495.79
+             566.11,499.27 569.50,505.75 571.00,511.00
+             559.31,510.35 550.46,500.03 535.00,499.21
+             520.20,498.42 503.80,507.99 486.00,508.00
+             488.45,499.83 500.47,495.54 508.00,493.00 Z
+           M 284.00,490.00
+           C 291.36,490.03 297.48,491.03 302.47,497.09
+             303.81,498.72 305.72,501.61 305.18,504.03
+             304.14,508.13 298.39,505.33 296.00,504.03
+             290.82,501.81 284.86,497.86 279.00,498.21
+             266.54,498.96 262.11,509.32 250.00,510.00
+             253.05,495.68 271.18,489.95 284.00,490.00 Z"
+   </string>
     <string name="title_activity_settings">Settings</string>
 
     <!-- Strings related to Settings -->

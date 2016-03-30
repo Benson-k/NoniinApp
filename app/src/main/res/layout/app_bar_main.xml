@@ -8,10 +8,12 @@
     android:fitsSystemWindows="true"
     tools:context="fi.benson.fleaapp.MainActivity">
 
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
+
 
         <FrameLayout
             android:id="@+id/toolbar_container"
@@ -25,6 +27,8 @@
                 android:background="@color/colorPrimaryDark"
                 app:layout_scrollFlags="scroll|enterAlways"/>
 
+
+
             <com.miguelcatalan.materialsearchview.MaterialSearchView
                 android:id="@+id/search_view"
                 android:layout_width="match_parent"
@@ -35,6 +39,8 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_main" />
+
+
 
     <io.github.yavski.fabspeeddial.FabSpeedDial
         android:id="@+id/fabspeed"
