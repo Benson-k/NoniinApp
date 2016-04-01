@@ -198,8 +198,8 @@ public class MainActivity extends AppCompatActivity
         }else if (id == R.id.nav_profile){
             drawer.closeDrawer(GravityCompat.START);
         }else if (id == R.id.nav_settings){
-            intent = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivity(intent);
+          //  intent = new Intent(MainActivity.this, SettingsActivity.class);
+          //  startActivity(intent);
             drawer.closeDrawer(GravityCompat.START);
         }else if (id == R.id.nav_favorite){
             drawer.closeDrawer(GravityCompat.START);
